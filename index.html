@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailQual v4 — Contrôle Qualité Ferroviaire</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="home-wrap">
+        <aside class="hl">
+            <div class="hl-top">
+                <div class="brand">
+                    <div class="brand-ico">RQ</div>
+                    <div class="brand-name">RailQual <span class="brand-ver">v4.0</span></div>
+                </div>
+                <button class="btn-new-proj" onclick="showM('np')">+ Nouveau Projet</button>
+            </div>
+            </aside>
+
+        <main id="main-content" class="hr flex flex-col justify-start gap-8">
+            <div class="hr-header">
+                <div>
+                    <h1 class="hr-title">Mes Projets</h1>
+                    <p class="hr-sub">Gestion des chantiers et fiches de contrôle</p>
+                </div>
+            </div>
+            <div id="proj-grid" class="proj-grid">
+                </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
