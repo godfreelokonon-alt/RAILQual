@@ -1,35 +1,707 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RailQual v4 — Contrôle Qualité Ferroviaire</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RailQual v4 — Contrôle Qualité Ferroviaire</title>
+<meta name="description" content="Application de gestion qualité pour chantiers ferroviaires RATP">
+<link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <div class="home-wrap">
-        <aside class="hl">
-            <div class="hl-top">
-                <div class="brand">
-                    <div class="brand-ico">RQ</div>
-                    <div class="brand-name">RailQual <span class="brand-ver">v4.0</span></div>
-                </div>
-                <button class="btn-new-proj" onclick="showM('np')">+ Nouveau Projet</button>
-            </div>
-            </aside>
+<body style="margin:0;padding:0">
 
-        <main id="main-content" class="hr flex flex-col justify-start gap-8">
-            <div class="hr-header">
-                <div>
-                    <h1 class="hr-title">Mes Projets</h1>
-                    <p class="hr-sub">Gestion des chantiers et fiches de contrôle</p>
-                </div>
+<!-- ════════════ HOME ════════════ -->
+<div class="screen active" id="sh">
+  <div class="home-wrap">
+
+    <!-- LEFT RAIL -->
+    <div class="hl">
+      <div class="hl-top">
+        <div class="brand">
+          <div class="brand-ico"><svg width="18" height="18"><use href="#i-logo"/></svg></div>
+          <div>
+            <div class="brand-name">RailQual</div>
+            <div class="brand-ver">v3.2 · SIGNAL</div>
+          </div>
+        </div>
+
+        <div class="kpi-strip" id="home-kpis">
+          <div class="kpi-item"><div class="kpi-v" id="kpi-proj">0</div><div class="kpi-l">Projets</div></div>
+          <div class="kpi-item"><div class="kpi-v" id="kpi-fiches">0</div><div class="kpi-l">Fiches</div></div>
+          <div class="kpi-item"><div class="kpi-v" id="kpi-joints">0</div><div class="kpi-l">Joints</div></div>
+        </div>
+
+        <button class="btn-new-proj" onclick="openNewProj()">
+          <svg width="13" height="13"><use href="#i-plus"/></svg>Nouveau projet
+        </button>
+      </div>
+
+      <!-- APPEARANCE -->
+      <div class="theme-section">
+        <div class="section-label">Apparence</div>
+
+        <div class="mode-toggle" id="mode-toggle">
+          <button class="mode-btn active" id="mode-light" onclick="(window.setMode||function(){})('light',this)">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+            Clair
+          </button>
+          <button class="mode-btn" id="mode-dark" onclick="(window.setMode||function(){})('dark',this)">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            Sombre
+          </button>
+          <button class="mode-btn" id="mode-midnight" onclick="(window.setMode||function(){})('midnight',this)">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Nuit
+          </button>
+        </div>
+
+        <div class="accent-row-label">Accent</div>
+        <div class="accent-circles" id="accent-circles">
+          <div class="accent-circle active" style="background:#F59E0B" onclick="(window.setAccent||function(){})('#F59E0B',this)" title="Ambre"></div>
+          <div class="accent-circle" style="background:#3B82F6" onclick="(window.setAccent||function(){})('#3B82F6',this)" title="Bleu"></div>
+          <div class="accent-circle" style="background:#10B981" onclick="(window.setAccent||function(){})('#10B981',this)" title="Emeraude"></div>
+          <div class="accent-circle" style="background:#EF4444" onclick="(window.setAccent||function(){})('#EF4444',this)" title="Rouge"></div>
+          <div class="accent-circle" style="background:#8B5CF6" onclick="(window.setAccent||function(){})('#8B5CF6',this)" title="Violet"></div>
+          <div class="accent-circle" style="background:#F43F5E" onclick="(window.setAccent||function(){})('#F43F5E',this)" title="Rose"></div>
+          <div class="accent-circle" style="background:#06B6D4" onclick="(window.setAccent||function(){})('#06B6D4',this)" title="Cyan"></div>
+          <div class="accent-circle" style="background:#F97316" onclick="(window.setAccent||function(){})('#F97316',this)" title="Orange"></div>
+          <div class="accent-circle" style="background:#84CC16" onclick="(window.setAccent||function(){})('#84CC16',this)" title="Lime"></div>
+          <div class="accent-circle" style="background:#6366F1" onclick="(window.setAccent||function(){})('#6366F1',this)" title="Indigo"></div>
+          <div class="accent-circle" style="background:#14B8A6" onclick="(window.setAccent||function(){})('#14B8A6',this)" title="Teal"></div>
+          <div class="accent-circle" style="background:#64748B" onclick="(window.setAccent||function(){})('#64748B',this)" title="Slate"></div>
+        </div>
+
+        <div class="special-themes" style="margin-top:12px">
+          <div class="section-label" style="width:100%;margin-bottom:6px">Thèmes spéciaux</div>
+          <div class="th-pill" id="thp-scada" onclick="(window.setSpecialTheme||function(){})('scada',this)" style="background:rgba(0,214,143,.1);border:1px solid rgba(0,214,143,.25);color:#00D68F;font-weight:600"><span class="th-dot" style="background:#00D68F;box-shadow:0 0 6px rgba(0,214,143,.5)"></span>SCADA</div>
+          <div class="th-pill" id="thp-vercel" onclick="(window.setSpecialTheme||function(){})('vercel',this)" style="background:rgba(52,152,219,.08);border:1px solid rgba(52,152,219,.25);color:#2980B9;font-weight:600"><span class="th-dot" style="background:#3498DB"></span>Vercel</div>
+          <div class="th-pill" id="thp-copper" onclick="(window.setSpecialTheme||function(){})('copper',this)"><span class="th-dot" style="background:#D97706"></span>Copper</div>
+          <div class="th-pill" id="thp-forest" onclick="(window.setSpecialTheme||function(){})('forest',this)"><span class="th-dot" style="background:#10B981"></span>Forest</div>
+          <div class="th-pill" id="thp-sand" onclick="(window.setSpecialTheme||function(){})('sand',this)"><span class="th-dot" style="background:#F59E0B;border:1px solid #D97706"></span>Sable</div>
+          <div class="th-pill" id="thp-ratp" onclick="(window.setSpecialTheme||function(){})('ratp',this)"><span class="th-dot" style="background:#003CA6"></span>RATP</div>
+          <div class="th-pill" id="thp-hc" onclick="(window.setSpecialTheme||function(){})('hc',this)"><span class="th-dot" style="background:#fff;border:1px solid #555"></span>HC</div>
+        </div>
+
+        <!-- Live mini preview -->
+        <div class="theme-live-preview" id="theme-live-preview">
+          <div class="tlp-bar"></div>
+          <div class="tlp-body">
+            <div class="tlp-rail">
+              <div class="tlp-s" style="left:0;width:42%;background:var(--ok)"></div>
+              <div class="tlp-s" style="left:44%;width:22%;background:var(--wt)"></div>
+              <div class="tlp-s" style="left:68%;width:14%;background:var(--nc)"></div>
             </div>
-            <div id="proj-grid" class="proj-grid">
-                </div>
-        </main>
+            <div class="tlp-dots">
+              <div class="tlp-dot" style="background:var(--ok)"></div>
+              <div class="tlp-dot" style="background:var(--wt)"></div>
+              <div class="tlp-dot" style="background:var(--nc)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hl-foot">
+        <div class="creator">
+          <div class="creator-av">GL</div>
+          <div>
+            <div class="creator-name">LOKONON Godfree Samir</div>
+            <div class="creator-role">Ingénieur Qualité · RATP / ETF</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- RIGHT — PROJECT GRID -->
+    <div class="hr">
+      <div class="hr-header">
+        <div>
+          <div class="hr-title">Projets</div>
+          <div class="hr-sub">Pilotage qualité ferroviaire multi-chantiers</div>
+        </div>
+      </div>
+      <div class="proj-grid" id="proj-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ APP ════════════ -->
+<div class="screen" id="sa">
+  <div class="sidebar">
+    <div class="sb-hdr">
+      <div class="sb-brand" onclick="(window.goHome||function(){})()">
+        <div class="sb-bi"><svg width="15" height="15"><use href="#i-logo"/></svg></div>
+        <div class="sb-bn">Rail<span>Qual</span></div>
+      </div>
+      <div class="sb-ps" onclick="(window.goHome||function(){})()">
+        <div class="sb-psc" id="sb-pc"></div>
+        <div class="sb-psi">
+          <div class="sb-psn" id="sb-pn">—</div>
+          <div class="sb-psm" id="sb-pm">—</div>
+        </div>
+        <svg width="14" height="14"><use href="#i-chev"/></svg>
+      </div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-sl">Navigation</div>
+      <div class="nv active" onclick="(window.showPage||function(){})('syn',this)" id="nv-syn">
+        <svg class="nv-ico" width="16" height="16"><use href="#i-syn"/></svg>
+        <span class="nv-lbl">Synoptique</span><span class="nv-bdg" id="nb-syn">—</span>
+      </div>
+      <div class="nv" onclick="(window.showPage||function(){})('fcq',this)" id="nv-fcq">
+        <svg class="nv-ico" width="16" height="16"><use href="#i-fcq"/></svg>
+        <span class="nv-lbl">Fiches FCQ</span><span class="nv-bdg" id="nb-fcq">—</span>
+      </div>
+      <div class="nv" onclick="(window.showPage||function(){})('joints',this)" id="nv-jt">
+        <svg class="nv-ico" width="16" height="16"><use href="#i-joints"/></svg>
+        <span class="nv-lbl">Joints</span><span class="nv-bdg" id="nb-jt">—</span>
+      </div>
+      <div class="nv" onclick="(window.showPage||function(){})('soud',this)" id="nv-soud">
+        <svg class="nv-ico" width="16" height="16"><use href="#i-soud"/></svg>
+        <span class="nv-lbl">Soudures</span><span class="nv-bdg" id="nb-soud">—</span>
+      </div>
+      <div class="nv" onclick="(window.showPage||function(){})('plan',this)" id="nv-plan">
+        <svg class="nv-ico" width="16" height="16"><use href="#i-plan"/></svg>
+        <span class="nv-lbl">Plan de contrôle</span><span class="nv-bdg" id="nb-plan">—</span>
+      </div>
+      <div class="nv" onclick="showPageAlerts(this)" id="nv-alerts" style="position:relative">
+        <svg class="nv-ico" width="16" height="16"><use href="#i-warn"/></svg>
+        <span class="nv-lbl">Alertes</span><span class="nv-bdg" id="nb-alerts">—</span>
+      </div>
+      <div class="sb-sl" style="margin-top:8px">Paramètres</div>
+      <div class="nv" onclick="(window.showPage||function(){})('cfg',this)" id="nv-cfg">
+        <svg class="nv-ico" width="16" height="16"><use href="#i-gen"/></svg>
+        <span class="nv-lbl">Configuration</span>
+      </div>
+    </div>
+    <div class="sb-foot">
+      <div class="sb-cr">
+        <div class="sb-cr-av"><svg width="11" height="11" color="var(--accent)"><use href="#i-star"/></svg></div>
+        <div>
+          <div class="sb-cr-n"><b>LOKONON</b> Godfree Samir</div>
+          <div class="sb-cr-r">Créateur · RailQual Pro</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-main">
+    <div class="topbar">
+      <button class="ico-btn mob-menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('mobile-open')" style="flex-shrink:0" title="Menu">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="tb-crumb">
+        <span id="tb-pn" style="cursor:pointer;color:var(--t3);transition:color .12s" onmouseover="this.style.color='var(--t1)'" onmouseout="this.style.color='var(--t3)'" onclick="(window.goHome||function(){})()" title="← Projets">—</span><span class="tb-sep">/</span>
+        <span class="tb-cur" id="tb-pg">Synoptique</span>
+      </div>
+      <div class="tb-search-wrap" id="tb-search-wrap">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="tb-search-inp" class="tb-search-inp" placeholder="Rechercher PK, fiche, ref, zone…" oninput="globalSearch(this.value)" onkeydown="if(event.key==='Escape'){this.value='';globalSearch('')}" autocomplete="off">
+        <button class="tb-search-clear" id="tb-search-clear" onclick="document.getElementById('tb-search-inp').value='';globalSearch('')" style="display:none">×</button>
+      </div>
+      <div class="tb-search-wrap">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="tb-srch-inp" class="tb-search-inp" placeholder="Rechercher PK, fiche, ref, zoneâ¦" oninput="globalSearch(this.value)" onkeydown="if(event.key==='Escape'){this.value='';globalSearch('')}" autocomplete="off">
+        <button class="tb-srch-clear" id="tb-srch-clear" onclick="document.getElementById('tb-srch-inp').value='';globalSearch('')">&#215;</button>
+      </div>
+      <div class="tb-acts">
+        <div class="ico-btn" onclick="setTheme(nextTheme())" title="Changer thème"><svg width="14" height="14"><use href="#i-palette"/></svg></div>
+        <div class="ico-btn" id="alert-bell" onclick="showPageAlerts(document.getElementById('nv-alerts'))" title="Alertes" style="position:relative;color:var(--t3)"><svg width="15" height="15"><use href="#i-warn"/></svg></div>
+        <button class="btn" onclick="exportRapportPDF()" title="Exporter rapport PDF"><svg width="13" height="13"><use href="#i-up"/></svg> Export PDF</button>
+        <button class="btn pri" onclick="openAddFiche()"><svg width="11" height="11"><use href="#i-plus"/></svg> Fiche FCQ</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- SYNOPTIQUE -->
+      <div class="page active" id="pg-syn">
+        <div class="pg-hdr" style="margin-bottom:12px">
+          <div>
+            <div class="pg-title">Synoptique</div>
+            <div class="pg-sub">Cliquez zone = détails NC · Cliquez phase = vue PK · Double-clic zone = renommer</div>
+          </div>
+          <div class="pg-acts" style="gap:6px">
+            <button class="btn" id="undo-btn" onclick="undoAction()" title="Annuler (Ctrl+Z)" style="opacity:.4" disabled>
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8a5 5 0 1 0 1.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M3 4.5V8H6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Annuler
+            </button>
+            <button class="btn" onclick="clearGeneratedFiches()" title="Effacer les fiches sans date/PK/statut">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Effacer fiches auto
+            </button>
+            <button class="btn" onclick="reloadSynoptique()" title="Recharger le synoptique">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8a5 5 0 1 0 1.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M3 4.5V8H6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Recharger
+            </button>
+            <div class="legend-row">
+              <div class="leg"><div class="leg-dot" style="background:var(--ok)"></div>C</div>
+              <div class="leg"><div class="leg-dot" style="background:var(--nc)"></div>NC</div>
+              <div class="leg"><div class="leg-dot" style="background:var(--wt)"></div>Att.</div>
+              <div class="leg"><div class="leg-dot r" style="background:var(--vi)"></div>JIC</div>
+              <div class="leg"><div class="leg-dot r" style="background:var(--ro)"></div>JM</div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-row" id="syn-stats"></div>
+        <div class="syn-wrap">
+          <div class="syn-main">
+            <div class="syn-zoom-bar">
+              <span class="syn-zoom-label">Zoom</span>
+              <input type="range" class="syn-zoom-slider" id="syn-zoom" min="100" max="300" value="100" oninput="applySynZoom(this.value)">
+              <span class="syn-zoom-val" id="syn-zoom-val">100%</span>
+              <button class="ico-btn" onclick="applySynZoom(100);document.getElementById('syn-zoom').value=100" title="Réinitialiser zoom" style="flex-shrink:0">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              </button>
+            </div>
+            <div class="syn-scroll-container" id="syn-scroll">
+              <div class="syn-card" id="syn-card"></div>
+            </div>
+            </div><!-- /syn-scroll-container -->
+            <div style="font-family:var(--fm);font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--t3);margin-bottom:11px;display:flex;align-items:center;gap:8px">
+              <span>Avancement par phase</span>
+              <span style="flex:1;height:1px;background:var(--ln);display:block"></span>
+              <span style="color:var(--accent)">↓ cliquez pour détail</span>
+            </div>
+            <div class="phase-grid" id="phase-grid"></div>
+          </div>
+          <div class="syn-sidebar" id="zone-sidebar">
+            <div class="zd-inner" id="zd-inner"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FCQ -->
+      <div class="page" id="pg-fcq">
+        <div class="pg-hdr">
+          <div>
+            <div class="pg-title">Fiches FCQ</div>
+            <div class="pg-sub" id="fcq-desc">—</div>
+          </div>
+          <div class="pg-acts">
+            <button class="btn" onclick="exportRapportPDF()">
+              <svg width="12" height="12"><use href="#i-up"/></svg> Export PDF
+            </button>
+            <button class="btn pri" onclick="openAddFiche()">
+              <svg width="11" height="11"><use href="#i-plus"/></svg> Nouvelle fiche
+            </button>
+          </div>
+        </div>
+
+        <!-- STAT STRIP — compact, cliquable, collé sous le header -->
+        <div class="fcq-stat-strip" id="fcq-stats"></div>
+
+        <!-- BARRE DE FILTRES — unifiée, logique claire -->
+        <div class="fcq-toolbar">
+          <div class="fcq-search-box">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="fcq-search-inp" id="fcq-s" placeholder="Référence, fiche, PK, commentaire…" oninput="renderFCQ()" autocomplete="off">
+            <button class="fcq-search-clear" id="fcq-s-clear" onclick="document.getElementById('fcq-s').value='';renderFCQ()" style="display:none">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="fcq-filter-group">
+            <span class="fcq-filter-label">Statut</span>
+            <button class="fq-pill active" id="fp-all"  onclick="setFCQStatut('all',this)">Tout</button>
+            <button class="fq-pill" id="fp-c"   onclick="setFCQStatut('C',this)">Conf.</button>
+            <button class="fq-pill fq-nc" id="fp-nc"  onclick="setFCQStatut('NC',this)">NC</button>
+            <button class="fq-pill fq-wt" id="fp-pend" onclick="setFCQStatut('',this)">Att.</button>
+          </div>
+          <div class="fcq-filter-sep"></div>
+          <div class="fcq-filter-group">
+            <span class="fcq-filter-label">Voie</span>
+            <button class="fq-pill active" id="fv-all" onclick="setFCQVoie('all',this)">V1+V2</button>
+            <button class="fq-pill" id="fv-v1" onclick="setFCQVoie('V1',this)">V1</button>
+            <button class="fq-pill" id="fv-v2" onclick="setFCQVoie('V2',this)">V2</button>
+          </div>
+          <span class="fcq-count" id="fcq-count"></span>
+        </div>
+
+        <!-- TABLE — flex:1, occupe tout l'espace restant -->
+        <div class="fcq-table-wrap">
+          <table class="dtbl" id="fcq-table">
+            <thead>
+              <tr>
+                <th onclick="sortFCQ('ref')" title="Trier">Réf. Planning <span id="sort-ref"></span></th>
+                <th onclick="sortFCQ('fiche')" title="Trier">Fiche de contrôle <span id="sort-fiche"></span></th>
+                <th onclick="sortFCQ('voie')" title="Trier">Voie <span id="sort-voie"></span></th>
+                <th onclick="sortFCQ('pk')" title="Trier">PK <span id="sort-pk"></span></th>
+                <th onclick="sortFCQ('date')" title="Trier">Date <span id="sort-date"></span></th>
+                <th onclick="sortFCQ('statut')" title="Trier">Statut <span id="sort-statut"></span></th>
+                <th>PJ</th>
+                <th style="width:60px"></th>
+              </tr>
+            </thead>
+            <tbody id="fcq-tb"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- JOINTS -->
+      <div class="page" id="pg-joints">
+        <div class="pg-hdr">
+          <div><div class="pg-title">Joints Isolants &amp; Mécaniques</div><div class="pg-sub">JIC et JM par voie et phase · Bibliothèque ferroviaire intégrée</div></div>
+          <div class="pg-acts"><button class="btn pri" onclick="openAddJoint()"><svg width="11" height="11"><use href="#i-plus"/></svg> Nouveau joint</button></div>
+        </div>
+        <div class="stat-row" id="jt-stats"></div>
+        <div class="tbar">
+          <button class="fpill on" id="jf-all" onclick="setJF('all',this)">Tout</button>
+          <button class="fpill" id="jf-jic" onclick="setJF('jic',this)">JIC</button>
+          <button class="fpill" id="jf-jm" onclick="setJF('jm',this)">JM</button>
+          <button class="fpill" id="jf-ph1" onclick="setJF('ph1',this)">Phase 1</button>
+          <button class="fpill" id="jf-ph2" onclick="setJF('ph2',this)">Phase 2</button>
+        </div>
+        <div class="jgrid" id="jt-grid"></div>
+      </div>
+
+      <!-- SOUDURES -->
+      <div class="page" id="pg-soud">
+        <div class="pg-hdr">
+          <div><div class="pg-title">Bibliothèque Soudures Ferroviaires</div><div class="pg-sub">Tous types de soudures voie ferrée — normes EN 14730, UIC, RATP</div></div>
+        </div>
+        <div class="soud-grid" id="soud-grid"></div>
+      </div>
+
+      <!-- PLAN -->
+      <div class="page" id="pg-plan">
+        <div class="plan-banner">
+          <div class="plan-ico"><svg width="22" height="22" color="var(--accent)"><use href="#i-plan"/></svg></div>
+          <div>
+            <div class="plan-t">Plan de Contrôle MOE Voie — RATP</div>
+            <div class="plan-s">Opérations · Tolérances · Points d'arrêt SF · Référentiel Govelins</div>
+          </div>
+          <div class="plan-acts">
+            <button class="btn" onclick="showImportPlanModal()"><svg width="13" height="13"><use href="#i-down"/></svg> Import Excel/PDF</button>
+            <button class="btn" onclick="resetPlanToDefault()" title="Réinitialiser le plan aux données RATP par défaut" style="color:var(--wt);border-color:var(--wt-bd)">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8a5 5 0 1 0 1.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M3 4.5V8H6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Réinitialiser
+            </button>
+            <button class="btn acc" onclick="genAllFichesFromPlan()" title="Générer toutes les fiches FCQ depuis le plan">
+              <svg width="11" height="11"><use href="#i-fcq"/></svg> Générer fiches FCQ
+            </button>
+            <button class="btn pri" onclick="openAddPlan()"><svg width="11" height="11"><use href="#i-plus"/></svg> Ajouter</button>
+          </div>
+        </div>
+        <div id="plan-hdr"></div>
+        <div id="plan-grid"></div>
+      </div>
+
+      <!-- ALERTES -->
+      <div class="page" id="pg-alerts"></div>
+
+      <!-- CONFIG -->
+      <div class="page" id="pg-cfg">
+        <div class="pg-hdr"><div><div class="pg-title">Configuration</div><div class="pg-sub">Paramètres projet, zones, apparence et types de fiches</div></div></div>
+        <div class="cfg-wrap">
+          <div class="cfg-nav">
+            <div class="cni active" onclick="showCfg('gen',this)"><svg class="cni-ico" width="15" height="15"><use href="#i-gen"/></svg>Général</div>
+            <div class="cni" onclick="showCfg('zones',this)"><svg class="cni-ico" width="15" height="15"><use href="#i-zones"/></svg>Zones PK</div>
+            <div class="cni" onclick="showCfg('app',this)"><svg class="cni-ico" width="15" height="15"><use href="#i-palette"/></svg>Apparence</div>
+            <div class="cni" onclick="showCfg('ft',this)"><svg class="cni-ico" width="15" height="15"><use href="#i-layers"/></svg>Types fiches</div>
+          </div>
+          <div class="cfg-panel">
+            <div class="cs active" id="cs-gen">
+              <div class="cs-t">Informations générales</div>
+              <div class="cs-s">Paramètres de base du chantier ferroviaire</div>
+              <div class="fgrid">
+                <div class="ff full"><div class="flbl">Nom du projet</div><input class="finp" id="cg-name" oninput="liveUpd()"></div>
+                <div class="ff"><div class="flbl">Ligne</div><input class="finp" id="cg-ligne" placeholder="Ligne 11, RER B…"></div>
+                <div class="ff"><div class="flbl">Type</div><select class="fsel" id="cg-type"><option value="metro">Métro</option><option value="rer">RER</option><option value="tram">Tramway</option></select></div>
+                <div class="ff"><div class="flbl">PK Début</div><input class="finp" id="cg-pks" type="number" oninput="liveUpd()"></div>
+                <div class="ff"><div class="flbl">PK Fin</div><input class="finp" id="cg-pke" type="number" oninput="liveUpd()"></div>
+                <div class="ff"><div class="flbl">Maître d'ouvrage</div><input class="finp" id="cg-moa" placeholder="RATP, SNCF…"></div>
+                <div class="ff"><div class="flbl">Entreprise</div><input class="finp" id="cg-ent" placeholder="ETF, TSO…"></div>
+                <div class="ff full"><div class="flbl">Description</div><textarea class="ftxt" id="cg-desc" rows="2" placeholder="Description du chantier…"></textarea></div>
+              </div>
+              <div style="margin-top:14px"><button class="btn pri" onclick="saveCfg()">Sauvegarder</button></div>
+            </div>
+            <div class="cs" id="cs-zones">
+              <div class="cs-t">Zones PK</div>
+              <div class="cs-s">Découpage géographique · modifiables aussi directement sur le synoptique</div>
+              <div class="zones-list" id="zones-list"></div>
+              <button class="add-btn" onclick="addZone()">+ Ajouter une zone</button>
+              <div style="margin-top:12px"><button class="btn pri" onclick="saveZones()">Sauvegarder</button></div>
+            </div>
+            <div class="cs" id="cs-app">
+              <div class="cs-t">Apparence</div>
+              <div class="cs-s">Thème, couleurs et identité visuelle du projet</div>
+              <div class="theme-cards">
+                <div class="th-card active" id="tcard-light" onclick="(window.setThemeCard||function(){})('light',this)">
+                  <div class="th-preview" style="background:linear-gradient(135deg,#F7F6F3,#fff)"></div>
+                  <div class="th-name">Clair</div><div class="th-sub">Mode lumineux</div>
+                </div>
+                <div class="th-card" id="tcard-dark" onclick="(window.setThemeCard||function(){})('dark',this)">
+                  <div class="th-preview" style="background:linear-gradient(135deg,#111113,#1C1C1F)"></div>
+                  <div class="th-name">Sombre</div><div class="th-sub">Dark mode</div>
+                </div>
+                <div class="th-card" id="tcard-midnight" onclick="(window.setThemeCard||function(){})('midnight',this)">
+                  <div class="th-preview" style="background:linear-gradient(135deg,#080C18,#182133)"></div>
+                  <div class="th-name">Midnight</div><div class="th-sub">Bleu nuit profond</div>
+                </div>
+                <div class="th-card" id="tcard-copper" onclick="(window.setThemeCard||function(){})('copper',this)">
+                  <div class="th-preview" style="background:linear-gradient(135deg,#18110A,#28200F)"></div>
+                  <div class="th-name">Copper</div><div class="th-sub">Industriel ferreux</div>
+                </div>
+                <div class="th-card" id="tcard-forest" onclick="(window.setThemeCard||function(){})('forest',this)">
+                  <div class="th-preview" style="background:linear-gradient(135deg,#060F09,#15281A)"></div>
+                  <div class="th-name">Forest</div><div class="th-sub">Vert profond</div>
+                </div>
+                <div class="th-card" id="tcard-sand" onclick="(window.setThemeCard||function(){})('sand',this)">
+                  <div class="th-preview" style="background:linear-gradient(135deg,#F9F5EE,#EBE1D0)"></div>
+                  <div class="th-name">Sable</div><div class="th-sub">Beige professionnel</div>
+                </div>
+                <div class="th-card" id="tcard-ratp" onclick="(window.setThemeCard||function(){})('ratp',this)">
+                  <div class="th-preview" style="background:linear-gradient(135deg,#192538,#2C3E5C)"></div>
+                  <div class="th-name">RATP</div><div class="th-sub">Bleu industriel</div>
+                </div>
+                <div class="th-card" id="tcard-hc" onclick="(window.setThemeCard||function(){})('hc',this)">
+                  <div class="th-preview" style="background:#000;border:2px solid #FFCC00"></div>
+                  <div class="th-name">Haut Contraste</div><div class="th-sub">Accessibilité</div>
+                </div>
+              </div>             </div>
+              <div class="fgrid">
+                <div class="ff"><div class="flbl">Couleur principale</div><input type="color" class="finp" id="ca-c1" value="#d97706" oninput="liveColor()" style="height:38px;padding:3px;cursor:pointer"><div class="cprev" id="cprev"></div></div>
+                <div class="ff"><div class="flbl">Couleur secondaire</div><input type="color" class="finp" id="ca-c2" value="#2563eb" oninput="liveColor()" style="height:38px;padding:3px;cursor:pointer"></div>
+                <div class="ff full"><div class="flbl">Logo / Identifiant</div><input class="finp" id="ca-logo" placeholder="M · ou URL image…"></div>
+              </div>
+              <div style="margin-top:12px"><button class="btn pri" onclick="saveApp()">Appliquer</button></div>
+            </div>
+            <div class="cs" id="cs-ft">
+              <div class="cs-t">Types de fiches FCQ</div>
+              <div class="cs-s">Référentiel des opérations qualité pour ce projet</div>
+              <div id="ftypes-list" style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px"></div>
+              <button class="add-btn" onclick="addFT()">+ Ajouter un type</button>
+              <div style="margin-top:12px"><button class="btn pri" onclick="toast('Types sauvegardés','ok')">Sauvegarder</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE DETAIL OVERLAY -->
+<div class="phase-detail-ov" id="pd-ov">
+  <div class="pd-panel" id="pd-panel">
+    <div class="pd-header">
+      <div class="pd-phase-ico" id="pd-ico"></div>
+      <div><div class="pd-phase-name" id="pd-name">—</div><div class="pd-phase-sub" id="pd-sub">—</div></div>
+      <button class="pd-close" onclick="closePhaseDetail()"><svg width="14" height="14"><use href="#i-x"/></svg> Fermer</button>
+    </div>
+    <div class="pd-body" id="pd-body"></div>
+  </div>
+</div>
+
+<!-- ZONE PANEL (inline, see syn-sidebar) -->
+
+<!-- MODALS -->
+<div class="mov" id="m-np">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">Nouveau projet</div><button class="mx" onclick="closeM('m-np')"><svg width="11" height="11"><use href="#i-x"/></svg></button></div>
+    <div class="type-sel">
+      <div class="topt sel" data-t="metro" onclick="selType(this)"><div class="topt-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="6" y="3" width="12" height="14" rx="3"/><path d="M8 17v2M16 17v2M6 10h12"/><circle cx="9" cy="13" r="1" fill="currentColor"/><circle cx="15" cy="13" r="1" fill="currentColor"/></svg></div><div class="topt-lbl">Métro</div><div class="topt-sub">Souterrain</div></div>
+      <div class="topt" data-t="rer" onclick="selType(this)"><div class="topt-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="5" y="2" width="14" height="16" rx="3"/><path d="M5 9h14M9 19l-1 2M15 19l1 2"/><circle cx="9" cy="13" r="1" fill="currentColor"/><circle cx="15" cy="13" r="1" fill="currentColor"/></svg></div><div class="topt-lbl">RER</div><div class="topt-sub">Régional</div></div>
+      <div class="topt" data-t="tram" onclick="selType(this)"><div class="topt-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="5" y="4" width="14" height="12" rx="2"/><path d="M8 4V2M16 4V2M5 12h14M9 16l-1 3M15 16l1 3M3 8h2M19 8h2"/></svg></div><div class="topt-lbl">Tramway</div><div class="topt-sub">Surface</div></div>
+    </div>
+    <div class="fgrid">
+      <div class="ff full"><div class="flbl">Nom du projet *</div><input class="finp" id="np-name" placeholder="ex: Renouvellement Voie Ligne 11"></div>
+      <div class="ff"><div class="flbl">Ligne *</div><input class="finp" id="np-ligne" placeholder="Ligne 11, RER B…"></div>
+      <div class="ff"><div class="flbl">Maître d'ouvrage</div><input class="finp" id="np-moa" placeholder="RATP, SNCF…"></div>
+      <div class="ff"><div class="flbl">PK Début *</div><input class="finp" id="np-pks" type="number" placeholder="18004"></div>
+      <div class="ff"><div class="flbl">PK Fin *</div><input class="finp" id="np-pke" type="number" placeholder="18915"></div>
+      <div class="ff"><div class="flbl">Couleur accent</div><input type="color" class="finp" id="np-color" value="#d97706" style="height:38px;padding:3px;cursor:pointer"></div>
+      <div class="ff"><div class="flbl">Couleur ligne RATP</div><select class="fsel" id="np-ligne-color"><option value="#FFBE00">M1 Jaune</option><option value="#003CA6">M2 Bleu</option><option value="#837902">M3 Olive</option><option value="#CF009E">M4 Fuschia</option><option value="#FF7E2E">M5 Orange</option><option value="#6ECA97">M6 Vert clair</option><option value="#FA9ABA">M7 Rose</option><option value="#CEADD2">M8 Lilas</option><option value="#D5C900">M9 Jaune citron</option><option value="#E3B32A">M10 Ocre</option><option value="#8D5E2A" selected>M11 Brun</option><option value="#00814F">M12 Vert foncé</option><option value="#98D4E2">M13 Cyan</option><option value="#662483">M14 Violet</option><option value="#E2231A">RER A Rouge</option><option value="#5191CD">RER B Bleu ciel</option><option value="#F0A500">RER C Jaune or</option><option value="#00A88F">RER D Vert</option><option value="#BA4A9B">RER E Violet</option></select></div>
+    </div>
+    <div class="macts"><button class="btn" onclick="closeM('m-np')">Annuler</button><button class="btn pri" onclick="(window.createProj||function(){})()">Créer le projet →</button></div>
+  </div>
+</div>
+
+<div class="mov" id="m-fiche">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle" id="fiche-mt">Nouvelle fiche FCQ</div><button class="mx" onclick="closeM('m-fiche')"><svg width="11" height="11"><use href="#i-x"/></svg></button></div>
+    <div class="fgrid">
+      <div class="ff full"><div class="flbl">Référence Planning *</div><input class="finp" id="af-ref" list="dl-refs" placeholder="ex: Relevage des voies R1"></div>
+      <datalist id="dl-refs"></datalist>
+      <div class="ff full"><div class="flbl">Fiche de contrôle *</div><input class="finp" id="af-fiche" placeholder="ex: FCQ-IDFO-2, MT3003 V4…"></div>
+      <div class="ff"><div class="flbl">Voie</div><select class="fsel" id="af-voie"><option>V1</option><option>V2</option></select></div>
+      <div class="ff"><div class="flbl">Statut</div><select class="fsel" id="af-stat"><option value="C">C — Conforme</option><option value="NC">NC — Non conforme</option><option value="">En attente</option></select></div>
+      <div class="ff"><div class="flbl">PK Début</div><input class="finp" id="af-pkd" type="number"></div>
+      <div class="ff"><div class="flbl">PK Fin</div><input class="finp" id="af-pkf" type="number"></div>
+      <div class="ff"><div class="flbl">Date réception</div><input class="finp" id="af-date" type="date"></div>
+      <div class="ff"><div class="flbl">Signature</div><input class="finp" id="af-sig" placeholder="Initiales"></div>
+      <div class="ff full"><div class="flbl">Commentaires / Réserves</div><textarea class="ftxt" id="af-com" rows="2" placeholder="Observations éventuelles…"></textarea></div>
+      <div class="ff full">
+        <div class="flbl">Pièces jointes
+          <span style="font-size:9px;color:var(--t3);font-weight:400;margin-left:6px">PDF, images · glisser-déposer ou clic</span>
+        </div>
+        <div class="pj-dropzone" id="pj-dropzone"
+          ondragover="event.preventDefault();this.classList.add('pj-dz-over')"
+          ondragleave="this.classList.remove('pj-dz-over')"
+          ondrop="handlePJDrop(event)"
+          onclick="document.getElementById('pj-input').click()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <span>Glisser un PDF / photo ici, ou cliquer</span>
+        </div>
+        <input type="file" id="pj-input" accept=".pdf,image/*" multiple style="display:none" onchange="handlePJInput(this)">
+        <div class="pj-list" id="pj-list"></div>
+      </div>
+    </div>
+    <div id="af-history-section" style="display:none;padding:0 20px 10px">
+      <div style="font-family:var(--fm);font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-bottom:6px">Historique</div>
+      <div id="af-history-list" style="display:flex;flex-direction:column;gap:4px;max-height:120px;overflow-y:auto"></div>
+    </div>
+    <div id="fiche-hist-sec" style="display:none;padding:0 18px 10px">
+      <div style="font-family:var(--fm);font-size:8.5px;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-bottom:5px">Historique</div>
+      <div class="hist-list" id="fiche-hist-list"></div>
+    </div>
+    <div class="macts"><button class="btn" onclick="closeM('m-fiche')">Annuler</button><button class="btn pri" onclick="saveFiche()">Enregistrer</button></div>
+  </div>
+</div>
+
+<div class="mov" id="m-joint">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">Nouveau joint</div><button class="mx" onclick="closeM('m-joint')"><svg width="11" height="11"><use href="#i-x"/></svg></button></div>
+    <div class="fgrid">
+      <div class="ff"><div class="flbl">Type *</div><select class="fsel" id="aj-type"><option value="jic">JIC — Joint Isolant Collé</option><option value="jm">JM — Joint Mécanique</option></select></div>
+      <div class="ff"><div class="flbl">Zone</div><input class="finp" id="aj-zone"></div>
+      <div class="ff full"><div class="flbl">Zone encadrante</div><input class="finp" id="aj-enc" placeholder="Z.4939 / Z.4943"></div>
+      <div class="ff"><div class="flbl">Voie *</div><select class="fsel" id="aj-voie"><option value="1">Voie 1</option><option value="2">Voie 2</option></select></div>
+      <div class="ff"><div class="flbl">PK (km)</div><input class="finp" id="aj-pk" type="number" step="0.001"></div>
+      <div class="ff"><div class="flbl">Type CI</div><input class="finp" id="aj-ci" type="number" placeholder="1400"></div>
+      <div class="ff"><div class="flbl">Date prévisionnelle</div><input class="finp" id="aj-date"></div>
+      <div class="ff"><div class="flbl">Phase</div><select class="fsel" id="aj-phase"><option>Phase 1</option><option>Phase 2</option></select></div>
+      <div class="ff full"><div class="flbl">Remarques</div><textarea class="ftxt" id="aj-detail" rows="2"></textarea></div>
+    </div>
+    <div class="macts"><button class="btn" onclick="closeM('m-joint')">Annuler</button><button class="btn pri" onclick="saveJoint()">Enregistrer</button></div>
+  </div>
+</div>
+
+<div class="mov" id="m-plan">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">Ajouter au plan de contrôle</div><button class="mx" onclick="closeM('m-plan')"><svg width="11" height="11"><use href="#i-x"/></svg></button></div>
+    <div class="fgrid">
+      <div class="ff full"><div class="flbl">Nom de l'opération *</div><input class="finp" id="pl-name" placeholder="ex: Contrôle géométrie voie"></div>
+      <div class="ff"><div class="flbl">Type</div><select class="fsel" id="pl-type"><option>Contrôle dimensionnel</option><option>Contrôle documentaire</option><option>Essai</option><option>Inspection visuelle</option><option>Mesure</option></select></div>
+      <div class="ff"><div class="flbl">Ordre</div><input class="finp" id="pl-ord" type="number" placeholder="1"></div>
+      <div class="ff full"><div class="flbl">Documents requis (virgules)</div><input class="finp" id="pl-docs" placeholder="FCQ-01, MT3003…"></div>
+      <div class="ff full"><div class="flbl">Notes</div><textarea class="ftxt" id="pl-notes" rows="2"></textarea></div>
+    </div>
+    <div class="macts"><button class="btn" onclick="closeM('m-plan')">Annuler</button><button class="btn pri" onclick="savePlan()">Ajouter</button></div>
+  </div>
+</div>
+
+<div class="mov" id="m-confirm">
+  <div class="conf-dlg">
+    <div class="conf-ico"><svg width="22" height="22" color="var(--wt)"><use href="#i-warn"/></svg></div>
+    <div class="conf-t" id="conf-t">Confirmer la suppression</div>
+    <div class="conf-m" id="conf-m">Cette action est irréversible.</div>
+    <div class="conf-acts">
+      <button class="btn" style="flex:1" onclick="closeM('m-confirm')">Annuler</button>
+      <button class="btn danger" style="flex:1" id="conf-ok">Supprimer</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT JOINT MODAL -->
+<div class="mov" id="m-edit-joint">
+  <div class="modal">
+    <div class="mhdr">
+      <div class="mtitle" id="mj-title">Modifier le joint</div>
+      <button class="mx" onclick="closeM('m-edit-joint')"><svg width="11" height="11"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="fgrid">
+      <div class="ff"><div class="flbl">Type *</div>
+        <select class="fsel" id="ej-type">
+          <option value="jic">JIC — Joint Isolant Collé</option>
+          <option value="jm">JM — Joint Mécanique</option>
+        </select>
+      </div>
+      <div class="ff"><div class="flbl">Zone</div><input class="finp" id="ej-zone"></div>
+      <div class="ff full"><div class="flbl">Zone encadrante</div><input class="finp" id="ej-enc" placeholder="Z.4939 / Z.4943"></div>
+      <div class="ff"><div class="flbl">Voie *</div>
+        <select class="fsel" id="ej-voie">
+          <option value="1">Voie 1</option>
+          <option value="2">Voie 2</option>
+        </select>
+      </div>
+      <div class="ff"><div class="flbl">PK (km)</div><input class="finp" id="ej-pk" type="number" step="0.001"></div>
+      <div class="ff"><div class="flbl">Type CI</div><input class="finp" id="ej-ci" type="number" placeholder="1400"></div>
+      <div class="ff"><div class="flbl">Date prévisionnelle</div><input class="finp" id="ej-date"></div>
+      <div class="ff"><div class="flbl">Phase</div>
+        <select class="fsel" id="ej-phase">
+          <option>Phase 1</option>
+          <option>Phase 2</option>
+        </select>
+      </div>
+      <div class="ff full"><div class="flbl">Remarques / Alertes</div><textarea class="ftxt" id="ej-detail" rows="2"></textarea></div>
+    </div>
+    <div class="macts">
+      <button class="btn danger" onclick="confirmDel('joint',editJointIdx);closeM('m-edit-joint')">
+        <svg width="11" height="11"><use href="#i-x"/></svg> Supprimer
+      </button>
+      <div style="flex:1"></div>
+      <button class="btn" onclick="closeM('m-edit-joint')">Annuler</button>
+      <button class="btn pri" onclick="saveEditJoint()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- RECHERCHE GLOBALE OVERLAY -->
+<div class="srch-overlay" id="srch-overlay" onclick="if(event.target===this){document.getElementById('tb-search-inp').value='';globalSearch('')}">
+  <div class="srch-panel" id="srch-panel"></div>
+</div>
+
+<!-- OVERLAY RECHERCHE GLOBALE -->
+<div class="srch-ov" id="srch-ov" onclick="if(event.target===this)closeSearch()">
+  <div class="srch-panel" id="srch-panel"></div>
+</div>
+
+<!-- TOOLTIP -->
+<div class="tt" id="tt"><div class="tt-title" id="ttt"></div><div id="ttb"></div></div>
+
+<!-- GUIDE LAMP -->
+<button class="guide-btn" id="guide-btn" onclick="toggleGuide()" title="Guide d'utilisation">
+<svg width="16" height="16"><use href="#i-lamp"/></svg>
+</button>
+
+<!-- ═══ GUIDE OVERLAY ═══ -->
+<div class="guide-overlay" id="guide-overlay" onclick="if(event.target===this)toggleGuide()">
+<div class="guide-panel" id="guide-panel">
+  <div class="guide-hdr">
+    <div class="guide-hdr-ico">
+      <svg width="18" height="18"><use href="#i-lamp"/></svg>
+    </div>
+  </div>
+</div>
+</div>
+('m-edit-joint')">
+        <svg width="11" height="11"><use href="#i-x"/></svg> Supprimer
+      </button>
+      <div style="flex:1"></div>
+      <button class="btn" onclick="closeM('m-edit-joint')">Annuler</button>
+      <button class="btn pri" onclick="saveEditJoint()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLTIP -->
+<div class="tt" id="tt"><div class="tt-title" id="ttt"></div><div id="ttb"></div></div>
+
+<!-- GUIDE LAMP -->
+<button class="guide-btn" id="guide-btn" onclick="toggleGuide()" title="Guide d'utilisation">
+<svg width="16" height="16"><use href="#i-lamp"/></svg>
+</button>
+
+<!-- ═══ GUIDE OVERLAY ═══ -->
+<div class="guide-overlay" id="guide-overlay" onclick="if(event.target===this)toggleGuide()">
+<div class="guide-panel" id="guide-panel">
+  <div class="guide-hdr">
+    <div class="guide-hdr-ico">
+      <svg width="18" height="18"><use href="#i-lamp"/></svg>
+    </div>
+  </div>
+</div>
+</div>
+<script src="app.js"></script>
 </body>
 </html>
